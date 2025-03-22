@@ -1,4 +1,4 @@
-// src/CookieConsent.js
+// src/Cookies/CookieConsent.js
 import React, { useState, useEffect } from 'react';
 import './CookieConsent.css';
 
@@ -31,16 +31,20 @@ const CookieConsent = ({ onConsent }) => {
     return (
         <div className="cookie-consent-overlay">
             <div className="cookie-consent-banner">
-                <h2>Cookie Consent</h2>
+                <div className="cookie-consent-header">
+                    <img src="/logo.png" alt="Archery Scorer Logo" className="cookie-consent-logo" />
+                    <span className="cookie-consent-title">Archery Scorer</span>
+                </div>
+                <h2>Cookie Consent 🍪</h2>
                 <p>
-                    This website uses cookies and local storage to save your competition data and preferences (theme, language, etc.).
-                    Do you consent to the use of cookies and local storage?
+                    This website uses cookies and local storage to save your competition data and preferences (theme,
+                    language, etc.). Do you consent to the use of cookies and local storage?
                 </p>
                 <div className="cookie-consent-buttons">
-                    <button onClick={handleAccept} className="accept-button">
+                    <button onClick={handleAccept} className="btn accept">
                         Accept
                     </button>
-                    <button onClick={handleReject} className="reject-button">
+                    <button onClick={handleReject} className="btn reject">
                         Reject
                     </button>
                 </div>

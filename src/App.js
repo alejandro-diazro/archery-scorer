@@ -2,52 +2,26 @@
 import React, { useState } from 'react';
 import { ThemeProvider } from './ThemeContext';
 import { LanguageProvider } from './LanguageContext';
-import CookieConsent from './CookieConsent';
 import AppContent from './AppContent';
 import './App.css';
+import Footer from "./footer";
+import CookieConsentManager from "./Cookies/CokieConsentManager";
 
 function App() {
-    const [hasConsent, setHasConsent] = useState(null);
-
-    const handleConsent = (consent) => {
-        setHasConsent(consent);
-    };
-
     const handleClearCache = () => {
-        setHasConsent(null);
+        localStorage.removeItem('cookieConsent');
+        window.location.reload();
     };
-
-    if (hasConsent === null) {
-        return <CookieConsent onConsent={handleConsent} />;
-    }
-
-    if (!hasConsent) {
-        return (
-            <div className="App">
-                <h1>Cookie Consent Required</h1>
-                <p>
-                    You have rejected the use of cookies and local storage, which are required to use this application. Please
-                    accept cookies to continue.
-                </p>
-                <button
-                    onClick={() => {
-                        localStorage.removeItem('cookieConsent');
-                        setHasConsent(null);
-                    }}
-                    className="retry-button"
-                >
-                    Retry Consent
-                </button>
-            </div>
-        );
-    }
 
     return (
+        <CookieConsentManager>
         <ThemeProvider>
             <LanguageProvider>
-                <AppContent onClearCache={handleClearCache} />
+                <AppContent onClearCache={handleClearCache}/>
+                <Footer />
             </LanguageProvider>
         </ThemeProvider>
+        </CookieConsentManager>
     );
 }
 

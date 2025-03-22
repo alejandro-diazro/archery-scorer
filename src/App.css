@@ -1,4 +1,80 @@
 /* src/App.css */
+:root {
+  --background-primary: #fff; /* Fondo principal */
+  --background-secondary: #f5f5f5; /* Fondo secundario (como el body) */
+  --background-tertiary: #f9f9f9; /* Fondo terciario (como los elementos li) */
+  --text-primary: #333; /* Color de texto principal */
+  --text-secondary: #ddd; /* Color de texto secundario (usado en modo oscuro) */
+  --border-primary: #ddd; /* Color de bordes principal */
+  --border-secondary: #555; /* Color de bordes secundario (usado en modo oscuro) */
+  --header-background: #f2f2f2; /* Fondo de los encabezados (como th) */
+  --button-blue: #2196f3; /* Color de botones azules (como start-scoring-button) */
+  --button-blue-hover: #1976d2; /* Color de botones azules al hacer hover */
+  --button-disabled: #cccccc; /* Color de botones deshabilitados */
+  --link-color: #2196f3; /* Color de enlaces */
+  --success: #4caf50;
+  --success-hover: #45a049;
+  --danger: #f44336;
+  --danger-hover: #d32f2f;
+  --warning: #ff9800;
+  --warning-hover: #e68900;
+}
+
+body.light {
+  --background-primary: #fff;
+  --background-secondary: #f5f5f5;
+  --background-tertiary: #f9f9f9;
+  --text-primary: #333;
+  --border-primary: #ddd;
+  --header-background: #f2f2f2;
+}
+
+/* Modo oscuro: sobrescribir variables */
+body.dark {
+  --background-primary: #2a2a2a;
+  --background-secondary: #1a1a1a;
+  --background-tertiary: #3a3a3a;
+  --text-primary: #ddd;
+  --border-primary: #555;
+  --header-background: #444;
+}
+
+.btn {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.accept {
+  background-color: var(--success);
+  color: white;
+
+}
+
+.accept:hover {
+  background-color: var(--success-hover);
+}
+
+.reject {
+  background-color: var(--danger);
+  color: white;
+}
+
+.reject:hover {
+  background-color: var(--danger-hover);
+}
+
+.warning {
+  background-color: var(--warning);
+  color: white;
+}
+
+.warning:hover {
+  background-color: var(--warning-hover);
+}
+
 .App {
   text-align: center;
   max-width: 800px;
@@ -212,10 +288,6 @@ h2,
 h3,
 h4 {
   color: inherit;
-}
-
-div {
-  margin: 10px 0;
 }
 
 .score-input table {
