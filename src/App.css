@@ -1,0 +1,291 @@
+/* src/App.css */
+.App {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Estilos para modo claro */
+body.light {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+body.light .App {
+  background-color: #fff;
+}
+
+/* Estilos para modo oscuro */
+body.dark {
+  background-color: #1a1a1a;
+  color: #ddd;
+}
+
+body.dark .App {
+  background-color: #2a2a2a;
+}
+
+form {
+  margin: 20px 0;
+}
+
+input,
+select {
+  padding: 5px;
+  margin: 5px;
+  width: 200px;
+}
+
+button {
+  padding: 5px 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.create-button {
+  background-color: #ff9800;
+  margin: 20px 0;
+}
+
+.create-button:hover {
+  background-color: #e68900;
+}
+
+.start-scoring-button {
+  background-color: #2196f3;
+  margin: 20px 0;
+}
+
+.start-scoring-button:hover {
+  background-color: #1976d2;
+}
+
+.reset-button {
+  background-color: #f44336;
+  margin-top: 20px;
+}
+
+.reset-button:hover {
+  background-color: #d32f2f;
+}
+
+.retry-button {
+  background-color: #ff9800;
+  margin-top: 20px;
+  padding: 10px 20px;
+  border-radius: 4px;
+}
+
+.retry-button:hover {
+  background-color: #e68900;
+}
+
+.clear-cache-button {
+  background-color: #f44336;
+  margin: 10px 0;
+  padding: 10px 20px;
+  border-radius: 4px;
+}
+
+.clear-cache-button:hover {
+  background-color: #d32f2f;
+}
+
+.back-to-menu-button {
+  background-color: #2196f3;
+  margin: 10px 5px;
+  padding: 10px 20px;
+  border-radius: 4px;
+}
+
+.back-to-menu-button:hover {
+  background-color: #1976d2;
+}
+
+.load-button {
+  background-color: #2196f3;
+  margin: 0 5px;
+}
+
+.load-button:hover {
+  background-color: #1976d2;
+}
+
+.delete-button {
+  background-color: #f44336;
+  margin: 0 5px;
+}
+
+.delete-button:hover {
+  background-color: #d32f2f;
+}
+
+.delete-participant-button {
+  background-color: #f44336;
+  margin-left: 10px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.delete-participant-button:hover {
+  background-color: #d32f2f;
+}
+
+.export-pdf-button {
+  background-color: #4caf50;
+  margin: 0 5px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.export-pdf-button:hover {
+  background-color: #45a049;
+}
+
+.nav-series-button {
+  background-color: #ff9800;
+  margin: 0 10px;
+  padding: 10px 20px;
+  border-radius: 4px;
+}
+
+.nav-series-button:hover {
+  background-color: #e68900;
+}
+
+.nav-series-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.series-navigation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.series-navigation span {
+  font-size: 1.2em;
+  margin: 0 10px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+body.light li {
+  background-color: #f9f9f9;
+}
+
+body.dark li {
+  background-color: #3a3a3a;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: inherit;
+}
+
+div {
+  margin: 10px 0;
+}
+
+.score-input table {
+  margin: 20px auto;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.score-input th,
+.score-input td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+body.light .score-input th,
+body.light .score-input td {
+  border-color: #ddd;
+}
+
+body.dark .score-input th,
+body.dark .score-input td {
+  border-color: #555;
+}
+
+body.light .score-input th {
+  background-color: #f2f2f2;
+}
+
+body.dark .score-input th {
+  background-color: #444;
+}
+
+.score-input input {
+  width: 40px;
+  padding: 2px;
+  text-align: center;
+}
+
+.score-input h4 {
+  margin-top: 20px;
+  border-top: 2px solid #ddd;
+  padding-top: 10px;
+}
+
+body.dark .score-input h4 {
+  border-top-color: #555;
+}
+
+.landing-page {
+  text-align: center;
+}
+
+.theme-toggle,
+.language-toggle {
+  margin: 20px 0;
+}
+
+.competition-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.saved-competitions-section {
+  margin-bottom: 20px;
+}
+
+.scoring-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
