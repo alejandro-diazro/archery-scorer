@@ -4,7 +4,7 @@ import { ThemeProvider } from './ThemeContext';
 import { LanguageProvider } from './LanguageContext';
 import AppContent from './AppContent';
 import './App.css';
-import Footer from "./footer";
+import Footer from "./Footer/footer";
 import CookieConsentManager from "./Cookies/CokieConsentManager";
 
 function App() {
@@ -18,7 +18,6 @@ function App() {
         <ThemeProvider>
             <LanguageProvider>
                 <AppContent onClearCache={handleClearCache}/>
-                <Footer />
             </LanguageProvider>
         </ThemeProvider>
         </CookieConsentManager>

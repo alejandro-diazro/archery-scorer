@@ -1,4 +1,3 @@
-// src/Cookies/CookieConsent.js
 import React, { useState, useEffect } from 'react';
 import './CookieConsent.css';
 
@@ -32,7 +31,7 @@ const CookieConsent = ({ onConsent }) => {
         <div className="cookie-consent-overlay">
             <div className="cookie-consent-banner">
                 <div className="cookie-consent-header">
-                    <img src="/logo.png" alt="Archery Scorer Logo" className="cookie-consent-logo" />
+                    <img src="/archery-scorer/logo.png" alt="Archery Scorer Logo" className="cookie-consent-logo" />
                     <span className="cookie-consent-title">Archery Scorer</span>
                 </div>
                 <h2>Cookie Consent 🍪</h2>

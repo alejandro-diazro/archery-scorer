@@ -1,0 +1,136 @@
+.landing-page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 1.25rem;
+    box-sizing: border-box;
+}
+
+.landing-page {
+    background-color: var(--background-primary);
+    color: var(--text-primary);
+    padding: 1.875rem;
+    border-radius: 0.5rem;
+    max-width: 37.5rem;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+}
+
+.landing-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+}
+
+.landing-page-logo {
+    width: 3.125rem;
+    height: 3.125rem;
+    margin-right: 0.9375rem;
+}
+
+.landing-page-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--text-primary);
+}
+
+.settings-bar {
+    display: flex;
+    justify-content: center;
+    gap: 0.1rem;
+    margin-bottom: 0.25rem;
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    font-weight: 100;
+    color: var(--text-primary);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-icon:hover {
+    background-color: var(--background-tertiary);
+}
+
+.language-toggle-wrapper {
+    position: relative;
+}
+
+.language-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--background-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 0.25rem;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    min-width: 8rem;
+}
+
+.language-dropdown button {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    background: none;
+    border: none;
+    text-align: left;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.language-dropdown button:hover {
+    background-color: var(--background-tertiary);
+}
+
+.landing-page h2 {
+    font-size: 1.4em;
+    margin: 1.25rem 0;
+    color: var(--text-primary);
+}
+
+.saved-competitions-section {
+    margin-bottom: 1.25rem;
+}
+
+.saved-competitions-section p {
+    color: var(--text-primary);
+}
+
+@media (max-width: 37.5rem) {
+    .landing-page-wrapper{
+        padding: 0;
+    }
+
+    .landing-page {
+        padding: 1.25rem;
+    }
+
+    .landing-page-logo {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+
+    .landing-page-title {
+        font-size: 1.5em;
+    }
+
+    .landing-page h2 {
+        font-size: 1.2em;
+    }
+
+    .theme-toggle-btn,
+    .language-toggle-btn {
+        font-size: 1.25rem;
+    }
+}

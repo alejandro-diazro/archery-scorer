@@ -8,8 +8,6 @@
   --border-primary: #ddd; /* Color de bordes principal */
   --border-secondary: #555; /* Color de bordes secundario (usado en modo oscuro) */
   --header-background: #f2f2f2; /* Fondo de los encabezados (como th) */
-  --button-blue: #2196f3; /* Color de botones azules (como start-scoring-button) */
-  --button-blue-hover: #1976d2; /* Color de botones azules al hacer hover */
   --button-disabled: #cccccc; /* Color de botones deshabilitados */
   --link-color: #2196f3; /* Color de enlaces */
   --success: #4caf50;
@@ -18,6 +16,8 @@
   --danger-hover: #d32f2f;
   --warning: #ff9800;
   --warning-hover: #e68900;
+  --info: #2196f3;
+  --info-hover: #1976d2;
 }
 
 body.light {
@@ -75,11 +75,20 @@ body.dark {
   background-color: var(--warning-hover);
 }
 
+.info {
+  background-color: var(--info);
+  color: white;
+
+}
+
+.info:hover {
+  background-color: var(--info-hover);
+}
+
 .App {
   text-align: center;
   max-width: 800px;
   margin: 0 auto;
-  padding: 20px;
   transition: background-color 0.3s, color 0.3s;
 }
 
@@ -89,18 +98,10 @@ body.light {
   color: #333;
 }
 
-body.light .App {
-  background-color: #fff;
-}
-
 /* Estilos para modo oscuro */
 body.dark {
   background-color: #1a1a1a;
   color: #ddd;
-}
-
-body.dark .App {
-  background-color: #2a2a2a;
 }
 
 form {
@@ -335,15 +336,6 @@ body.dark .score-input th {
 
 body.dark .score-input h4 {
   border-top-color: #555;
-}
-
-.landing-page {
-  text-align: center;
-}
-
-.theme-toggle,
-.language-toggle {
-  margin: 20px 0;
 }
 
 .competition-actions {

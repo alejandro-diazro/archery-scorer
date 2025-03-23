@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { LanguageContext } from './LanguageContext';
 import jsPDF from 'jspdf';
-import LandingPage from './LandingPage';
+import LandingPage from './Home/LandingPage';
 import CompetitionConfigForm from './CompetitionConfigForm';
 import CompetitionConfigDisplay from './CompetitionConfigDisplay';
 import ParticipantForm from './ParticipantForm';

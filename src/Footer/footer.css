@@ -1,0 +1,8 @@
+.footer{
+   color: var(--text-primary);
+}
+
+.footer a{
+    color: var(--info);
+    text-decoration: none;
+}

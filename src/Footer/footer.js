@@ -1,14 +1,11 @@
-import { ThemeProvider } from './ThemeContext';
-import { LanguageProvider } from './LanguageContext';
-import AppContent from './AppContent';
-import './App.css';
+import "./footer.css"
 
 function Footer() {
 
-    const { version } = require('../package.json');
+    const { version } = require('../../package.json');
 
     return (
-        <footer className="app-footer">
+        <div className="footer">
             <p>
                 Made by{' '}
                 <a
@@ -21,7 +18,7 @@ function Footer() {
                 </a>{' '}
                 | Version {version}
             </p>
-        </footer>
+        </div>
     );
 }
 
