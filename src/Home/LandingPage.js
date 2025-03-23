@@ -1,14 +1,16 @@
-import React, {useContext, useState} from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { ThemeContext } from '../ThemeContext';
 import { LanguageContext } from '../LanguageContext';
 import "./LandingPage.css"
-import {FaGlobe, FaMoon, FaSun} from "react-icons/fa";
+import {FaGlobe, FaMoon, FaShareAlt, FaSun} from "react-icons/fa";
+import queryString from 'query-string';
 import Footer from "../Footer/footer";
 
 const LandingPage = ({ onCreateCompetition, savedCompetitions, onLoadCompetition, onDeleteCompetition, onClearCache, onExportToPDF }) => {
     const { theme, setTheme } = useContext(ThemeContext);
     const { language, setLanguage, t } = useContext(LanguageContext);
     const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
+    const [sharedCompetitionMessage, setSharedCompetitionMessage] = useState(null);
 
     const toggleTheme = () => {
         setTheme(theme === 'light' ? 'dark' : 'light');
@@ -22,6 +24,51 @@ const LandingPage = ({ onCreateCompetition, savedCompetitions, onLoadCompetition
         setLanguage(lang);
         setShowLanguageDropdown(false);
     };
+
+    const shareCompetition = (index) => {
+        const competition = savedCompetitions[index];
+        const encodedCompetition = btoa(JSON.stringify(competition));
+        const shareUrl = `${window.location.origin}${window.location.pathname}?share=${encodedCompetition}`;
+        navigator.clipboard.writeText(shareUrl).then(() => {
+            alert('Share URL copied to clipboard: ' + shareUrl);
+        });
+    };
+
+    const handleClearCache = () => {
+        const confirmMessage = t.clearCacheConfirm || "Are you sure you want to clear the cache? This action is irreversible and will delete all saved competitions.";
+        const userConfirmed = window.confirm(confirmMessage);
+
+        if (userConfirmed) {
+            onClearCache();
+        }
+    };
+
+    useEffect(() => {
+        const params = queryString.parse(window.location.search);
+        if (params.share) {
+            try {
+                const decodedCompetition = JSON.parse(atob(params.share));
+                const existingCompetitions = JSON.parse(localStorage.getItem('competitions')) || [];
+                const competitionExists = existingCompetitions.some(
+                    (comp) =>
+                        comp.name === decodedCompetition.name &&
+                        comp.location === decodedCompetition.location &&
+                        comp.date === decodedCompetition.date
+                );
+                if (!competitionExists) {
+                    const updatedCompetitions = [...existingCompetitions, decodedCompetition];
+                    localStorage.setItem('competitions', JSON.stringify(updatedCompetitions));
+                    setSharedCompetitionMessage('Shared competition has been saved! You can now load it from the list below.');
+                } else {
+                    setSharedCompetitionMessage('This competition is already in your saved competitions.');
+                }
+                window.history.replaceState({}, document.title, window.location.pathname);
+            } catch (error) {
+                console.error('Error decoding shared competition:', error);
+                setSharedCompetitionMessage('Error loading shared competition. The URL may be invalid.');
+            }
+        }
+    }, []);
 
     return (
         <div className="landing-page-wrapper">
@@ -46,6 +93,11 @@ const LandingPage = ({ onCreateCompetition, savedCompetitions, onLoadCompetition
                         )}
                     </div>
                 </div>
+                {sharedCompetitionMessage && (
+                    <div className="shared-competition-message">
+                        <p>{sharedCompetitionMessage}</p>
+                    </div>
+                )}
                 <h2>{t.savedCompetitions}</h2>
                 <div className="saved-competitions-section">
                     {savedCompetitions.length === 0 ? (
@@ -65,13 +117,16 @@ const LandingPage = ({ onCreateCompetition, savedCompetitions, onLoadCompetition
                                         <button onClick={() => onExportToPDF(index)} className="btn success">
                                             PDF
                                         </button>
+                                        <button onClick={() => shareCompetition(index)} className="share-button">
+                                            <FaShareAlt/> {t.share}
+                                        </button>
                                     </div>
                                 </li>
                             ))}
                         </ul>
                     )}
                 </div>
-                <button onClick={onClearCache} className="btn reject">
+                <button onClick={handleClearCache} className="btn reject">
                     {t.clearCache}
                 </button>
                 <span> </span>

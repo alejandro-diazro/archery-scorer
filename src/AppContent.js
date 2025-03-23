@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { LanguageContext } from './LanguageContext';
 import jsPDF from 'jspdf';
 import LandingPage from './Home/LandingPage';
-import CompetitionConfigForm from './CompetitionConfigForm';
+import CompetitionConfigForm from './CompetitionConfig/CompetitionConfigForm';
 import CompetitionConfigDisplay from './CompetitionConfigDisplay';
 import ParticipantForm from './ParticipantForm';
 import ParticipantList from './ParticipantList';
@@ -13,6 +13,7 @@ import Scoreboard from './Scoreboard';
 const AppContent = ({ onClearCache }) => {
     const { t } = useContext(LanguageContext);
 
+    // Estados principales
     const [competitionConfig, setCompetitionConfig] = useState(() => {
         const savedConfig = localStorage.getItem('archeryCompetitionConfig');
         return savedConfig
@@ -31,12 +32,14 @@ const AppContent = ({ onClearCache }) => {
     const [hasSavedCompetition, setHasSavedCompetition] = useState(false);
     const [currentSeries, setCurrentSeries] = useState(0);
 
+    // Guardar datos en localStorage cuando cambian
     useEffect(() => {
         localStorage.setItem('archeryCompetitionConfig', JSON.stringify(competitionConfig));
         localStorage.setItem('archeryParticipants', JSON.stringify(participants));
         localStorage.setItem('savedCompetitions', JSON.stringify(savedCompetitions));
     }, [competitionConfig, participants, savedCompetitions]);
 
+    // Guardar la competición en savedCompetitions cuando se completa la configuración
     useEffect(() => {
         if (
             competitionConfig.isConfigured &&
@@ -69,6 +72,7 @@ const AppContent = ({ onClearCache }) => {
         }
     }, [competitionConfig, participants, phase, savedCompetitions, hasSavedCompetition]);
 
+    // Funciones de manejo de competiciones
     const exportToPDF = (index) => {
         const competition = savedCompetitions[index];
         const doc = new jsPDF();
@@ -102,8 +106,7 @@ const AppContent = ({ onClearCache }) => {
 
         // Puntuaciones de los arqueros
         competition.participants.forEach((participant, participantIndex) => {
-            // Verificar si hay espacio suficiente para el siguiente bloque
-            if (yPosition > pageHeight - 40) { // 40 mm de margen inferior
+            if (yPosition > pageHeight - 40) {
                 doc.addPage();
                 yPosition = margin;
             }
@@ -112,13 +115,12 @@ const AppContent = ({ onClearCache }) => {
             const participantHeader = `${participant.name} (${participant.archerType}, ${participant.targetType})`;
             const participantLines = doc.splitTextToSize(participantHeader, maxWidth);
             doc.text(participantLines, margin, yPosition);
-            yPosition += participantLines.length * 7; // Ajustar según el número de líneas
+            yPosition += participantLines.length * 7;
 
             const maxRounds = parseInt(competition.rounds) * parseInt(competition.series);
             const roundsPerSeries = parseInt(competition.rounds);
             const seriesCount = parseInt(competition.series);
 
-            // Iterar por series
             for (let seriesIndex = 0; seriesIndex < seriesCount; seriesIndex++) {
                 if (yPosition > pageHeight - 40) {
                     doc.addPage();
@@ -134,7 +136,6 @@ const AppContent = ({ onClearCache }) => {
                     doc.text(`Series ${seriesIndex + 1}`, margin, yPosition);
                     yPosition += 5;
 
-                    // Encabezado de la tabla
                     let tableHeader = 'Round | ';
                     for (let i = 1; i <= parseInt(competition.arrowsPerRound); i++) {
                         tableHeader += `Arrow ${i} | `;
@@ -144,7 +145,6 @@ const AppContent = ({ onClearCache }) => {
                     doc.text(headerLines, margin, yPosition);
                     yPosition += headerLines.length * 5;
 
-                    // Contenido de la tabla
                     seriesRounds.forEach((round, roundIndex) => {
                         if (yPosition > pageHeight - 20) {
                             doc.addPage();
@@ -169,7 +169,6 @@ const AppContent = ({ onClearCache }) => {
                         yPosition += rowLines.length * 5;
                     });
 
-                    // Subtotal de la serie
                     if (yPosition > pageHeight - 20) {
                         doc.addPage();
                         yPosition = margin;
@@ -182,7 +181,6 @@ const AppContent = ({ onClearCache }) => {
                 }
             }
 
-            // Total final del arquero
             if (yPosition > pageHeight - 20) {
                 doc.addPage();
                 yPosition = margin;
@@ -195,7 +193,6 @@ const AppContent = ({ onClearCache }) => {
             doc.text(totalLines, margin, yPosition);
             yPosition += totalLines.length * 5 + 5;
 
-            // Separador entre arqueros
             if (yPosition > pageHeight - 20) {
                 doc.addPage();
                 yPosition = margin;
@@ -205,53 +202,44 @@ const AppContent = ({ onClearCache }) => {
             yPosition += 5;
         });
 
-        // Guardar el PDF
         doc.save(`${competition.name.replace(/\s+/g, '_')}_scores.pdf`);
     };
 
+    // Funciones de navegación
     const handleConfigSubmit = (newConfig) => {
         setCompetitionConfig({ ...newConfig, isConfigured: true });
         setPhase('registration');
     };
 
-    const addParticipant = (name, targetType, archerType) => {
-        const maxRounds = parseInt(competitionConfig.rounds) * parseInt(competitionConfig.series);
-        const arrowsPerRound = parseInt(competitionConfig.arrowsPerRound);
-        const initialRounds = Array.from({ length: maxRounds }, () => ({
-            scores: Array(arrowsPerRound).fill(''),
-            sum: 0,
-        }));
-        setParticipants([...participants, { name, targetType, archerType, rounds: initialRounds, total: 0 }]);
+    const handleBackFromConfig = () => {
+        setPhase('landing');
     };
 
-    const deleteParticipant = (index) => {
-        const updatedParticipants = participants.filter((_, i) => i !== index);
-        setParticipants(updatedParticipants);
+    const handleBackFromRegistration = () => {
+        setPhase('config');
     };
 
-    const updateScores = (index, newRounds) => {
-        const updatedParticipants = [...participants];
-        updatedParticipants[index].rounds = newRounds;
+    const handleBackFromScoring = () => {
+        setPhase('registration');
+        setCurrentSeries(0);
+    };
 
-        const total = newRounds.reduce((acc, round) => acc + (round.sum || 0), 0);
-        updatedParticipants[index].total = total;
-
-        setParticipants(updatedParticipants);
-
-        const updatedSavedCompetitions = savedCompetitions.map((comp) => {
-            if (
-                comp.name === competitionConfig.name &&
-                comp.location === competitionConfig.location &&
-                comp.date === competitionConfig.date
-            ) {
-                return {
-                    ...comp,
-                    participants: updatedParticipants,
-                };
-            }
-            return comp;
+    const createNewCompetition = () => {
+        localStorage.removeItem('archeryCompetitionConfig');
+        localStorage.removeItem('archeryParticipants');
+        setCompetitionConfig({
+            name: '',
+            location: '',
+            date: '2025-03-21',
+            rounds: '',
+            arrowsPerRound: '',
+            series: '',
+            isConfigured: false,
         });
-        setSavedCompetitions(updatedSavedCompetitions);
+        setParticipants([]);
+        setHasSavedCompetition(false);
+        setPhase('config');
+        setCurrentSeries(0);
     };
 
     const startScoring = () => {
@@ -276,6 +264,54 @@ const AppContent = ({ onClearCache }) => {
         }
     };
 
+    const goToMenu = () => {
+        setPhase('landing');
+        setCurrentSeries(0);
+    };
+
+    // Funciones de manejo de participantes y puntuaciones
+    const addParticipant = (name, targetType, archerType) => {
+        const maxRounds = parseInt(competitionConfig.rounds) * parseInt(competitionConfig.series);
+        const arrowsPerRound = parseInt(competitionConfig.arrowsPerRound);
+        const initialRounds = Array.from({ length: maxRounds }, () => ({
+            scores: Array(arrowsPerRound).fill(''),
+            sum: 0,
+        }));
+        setParticipants([...participants, { name, targetType, archerType, rounds: initialRounds, total: 0 }]);
+    };
+
+    const deleteParticipant = (index) => {
+        const updatedParticipants = participants.filter((_, i) => i !== index);
+        setParticipants(updatedParticipants);
+    };
+
+    const updateScores = (index, newRounds) => {
+        const updatedParticipants = [...participants];
+        updatedParticipants[index].rounds = newRounds;
+
+        const total = newRounds.reduce((acc, round) => acc + (round.sum || 0), 0);
+        updatedParticipants[index].total = total;
+
+        setParticipants(updatedParticipants);
+
+        // Actualizar savedCompetitions con las nuevas puntuaciones
+        const updatedSavedCompetitions = savedCompetitions.map((comp) => {
+            if (
+                comp.name === competitionConfig.name &&
+                comp.location === competitionConfig.location &&
+                comp.date === competitionConfig.date
+            ) {
+                return {
+                    ...comp,
+                    participants: updatedParticipants,
+                };
+            }
+            return comp;
+        });
+        setSavedCompetitions(updatedSavedCompetitions);
+    };
+
+    // Funciones de manejo de almacenamiento
     const resetStorage = () => {
         localStorage.removeItem('archeryCompetitionConfig');
         localStorage.removeItem('archeryParticipants');
@@ -339,29 +375,7 @@ const AppContent = ({ onClearCache }) => {
         setSavedCompetitions(updatedSavedCompetitions);
     };
 
-    const goToMenu = () => {
-        setPhase('landing');
-        setCurrentSeries(0);
-    };
-
-    const createNewCompetition = () => {
-        localStorage.removeItem('archeryCompetitionConfig');
-        localStorage.removeItem('archeryParticipants');
-        setCompetitionConfig({
-            name: '',
-            location: '',
-            date: '2025-03-21',
-            rounds: '',
-            arrowsPerRound: '',
-            series: '',
-            isConfigured: false,
-        });
-        setParticipants([]);
-        setHasSavedCompetition(false);
-        setPhase('config');
-        setCurrentSeries(0);
-    };
-
+    // Renderizado de las vistas
     return (
         <div className="App">
             {phase === 'landing' ? (
@@ -374,17 +388,29 @@ const AppContent = ({ onClearCache }) => {
                     onExportToPDF={exportToPDF}
                 />
             ) : phase === 'config' ? (
-                <CompetitionConfigForm onConfigSubmit={handleConfigSubmit} initialConfig={competitionConfig} />
+                <CompetitionConfigForm
+                    onConfigSubmit={handleConfigSubmit}
+                    onBack={handleBackFromConfig}
+                    initialConfig={competitionConfig}
+                />
             ) : (
                 <>
                     <CompetitionConfigDisplay config={competitionConfig} />
                     {phase === 'registration' ? (
                         <>
                             <ParticipantForm addParticipant={addParticipant} />
-                            <button onClick={startScoring} className="start-scoring-button">
-                                {t.startScoring}
-                            </button>
+                            <div className="registration-actions">
+                                <button onClick={handleBackFromRegistration} className="back-to-config-button">
+                                    {t.back}
+                                </button>
+                                <button onClick={startScoring} className="start-scoring-button">
+                                    {t.startScoring}
+                                </button>
+                            </div>
                             <ParticipantList participants={participants} onDeleteParticipant={deleteParticipant} />
+                            <button onClick={resetStorage} className="reset-button">
+                                {t.resetAll}
+                            </button>
                         </>
                     ) : (
                         <>
@@ -418,6 +444,9 @@ const AppContent = ({ onClearCache }) => {
                             ))}
                             <Scoreboard participants={participants} />
                             <div className="scoring-actions">
+                                <button onClick={handleBackFromScoring} className="back-to-registration-button">
+                                    {t.back}
+                                </button>
                                 <button onClick={goToMenu} className="back-to-menu-button">
                                     Back to Menu
                                 </button>
@@ -426,11 +455,6 @@ const AppContent = ({ onClearCache }) => {
                                 </button>
                             </div>
                         </>
-                    )}
-                    {phase !== 'scoring' && (
-                        <button onClick={resetStorage} className="reset-button">
-                            {t.resetAll}
-                        </button>
                     )}
                 </>
             )}

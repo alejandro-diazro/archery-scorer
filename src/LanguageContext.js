@@ -41,6 +41,7 @@ const translations = {
         resetAll: "Reset All",
         previousSeries: "Previous Series",
         nextSeries: "Next Series",
+        onBack: "Go Back",
     },
     es: {
         welcome: "Bienvenido a Archery Scorer",
@@ -79,6 +80,7 @@ const translations = {
         resetAll: "Resetear Todo",
         previousSeries: "Serie Anterior",
         nextSeries: "Serie Siguiente",
+        onBack : "Ir Atras",
     },
 };
 
