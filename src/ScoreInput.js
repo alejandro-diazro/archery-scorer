@@ -145,6 +145,7 @@ const ScoreInput = ({ participant, onScoreUpdate, arrowsPerRound, roundsPerSerie
                                     <td key={scoreIndex}>
                                         <input
                                             type="text"
+                                            inputMode="numeric"
                                             value={tempScores[globalRoundIndex][scoreIndex]}
                                             placeholder="M"
                                             onChange={(e) => handleScoreChange(globalRoundIndex, scoreIndex, e.target.value)}

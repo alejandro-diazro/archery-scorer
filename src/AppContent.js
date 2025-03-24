@@ -31,7 +31,9 @@ const AppContent = ({ onClearCache }) => {
     });
     const [hasSavedCompetition, setHasSavedCompetition] = useState(false);
     const [currentSeries, setCurrentSeries] = useState(0);
-
+    const updateSavedCompetitions = (newCompetitions) => {
+        setSavedCompetitions(newCompetitions);
+    };
     // Guardar datos en localStorage cuando cambian
     useEffect(() => {
         localStorage.setItem('archeryCompetitionConfig', JSON.stringify(competitionConfig));
@@ -227,10 +229,13 @@ const AppContent = ({ onClearCache }) => {
     const createNewCompetition = () => {
         localStorage.removeItem('archeryCompetitionConfig');
         localStorage.removeItem('archeryParticipants');
+
+        const today = new Date().toISOString().split('T')[0];
+
         setCompetitionConfig({
             name: '',
             location: '',
-            date: '2025-03-21',
+            date: today,
             rounds: '',
             arrowsPerRound: '',
             series: '',
@@ -386,6 +391,7 @@ const AppContent = ({ onClearCache }) => {
                     onDeleteCompetition={deleteCompetition}
                     onClearCache={clearCache}
                     onExportToPDF={exportToPDF}
+                    updateSavedCompetitions={updateSavedCompetitions}
                 />
             ) : phase === 'config' ? (
                 <CompetitionConfigForm

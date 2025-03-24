@@ -338,15 +338,6 @@ body.dark .score-input h4 {
   border-top-color: #555;
 }
 
-.competition-actions {
-  display: flex;
-  gap: 10px;
-}
-
-.saved-competitions-section {
-  margin-bottom: 20px;
-}
-
 .scoring-actions {
   display: flex;
   justify-content: center;

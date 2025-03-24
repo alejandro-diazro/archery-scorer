@@ -6,7 +6,7 @@ import {FaGlobe, FaMoon, FaShareAlt, FaSun} from "react-icons/fa";
 import queryString from 'query-string';
 import Footer from "../Footer/footer";
 
-const LandingPage = ({ onCreateCompetition, savedCompetitions, onLoadCompetition, onDeleteCompetition, onClearCache, onExportToPDF }) => {
+const LandingPage = ({ onCreateCompetition, savedCompetitions, onLoadCompetition, onDeleteCompetition, onClearCache, onExportToPDF, updateSavedCompetitions  }) => {
     const { theme, setTheme } = useContext(ThemeContext);
     const { language, setLanguage, t } = useContext(LanguageContext);
     const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
@@ -29,9 +29,26 @@ const LandingPage = ({ onCreateCompetition, savedCompetitions, onLoadCompetition
         const competition = savedCompetitions[index];
         const encodedCompetition = btoa(JSON.stringify(competition));
         const shareUrl = `${window.location.origin}${window.location.pathname}?share=${encodedCompetition}`;
-        navigator.clipboard.writeText(shareUrl).then(() => {
-            alert('Share URL copied to clipboard: ' + shareUrl);
-        });
+        if (navigator.share) {
+            navigator.share({
+                title: t.shareCompetitionTitle || 'Share Archery Competition',
+                text: t.shareCompetitionText || `Check out this archery competition: ${competition.name} at ${competition.location} on ${competition.date}`,
+                url: shareUrl,
+            })
+                .then(() => {
+                    console.log('Competition shared successfully');
+                })
+                .catch((error) => {
+                    console.error('Error sharing competition:', error);
+                    navigator.clipboard.writeText(shareUrl).then(() => {
+                        alert(t.shareFallbackMessage || 'Share URL copied to clipboard: ' + shareUrl);
+                    });
+                });
+        } else {
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                alert(t.shareFallbackMessage || 'Share URL copied to clipboard: ' + shareUrl);
+            });
+        }
     };
 
     const handleClearCache = () => {
@@ -48,7 +65,7 @@ const LandingPage = ({ onCreateCompetition, savedCompetitions, onLoadCompetition
         if (params.share) {
             try {
                 const decodedCompetition = JSON.parse(atob(params.share));
-                const existingCompetitions = JSON.parse(localStorage.getItem('competitions')) || [];
+                const existingCompetitions = JSON.parse(localStorage.getItem('savedCompetitions')) || [];
                 const competitionExists = existingCompetitions.some(
                     (comp) =>
                         comp.name === decodedCompetition.name &&
@@ -57,7 +74,8 @@ const LandingPage = ({ onCreateCompetition, savedCompetitions, onLoadCompetition
                 );
                 if (!competitionExists) {
                     const updatedCompetitions = [...existingCompetitions, decodedCompetition];
-                    localStorage.setItem('competitions', JSON.stringify(updatedCompetitions));
+                    localStorage.setItem('savedCompetitions', JSON.stringify(updatedCompetitions));
+                    updateSavedCompetitions(updatedCompetitions);
                     setSharedCompetitionMessage('Shared competition has been saved! You can now load it from the list below.');
                 } else {
                     setSharedCompetitionMessage('This competition is already in your saved competitions.');
@@ -68,7 +86,7 @@ const LandingPage = ({ onCreateCompetition, savedCompetitions, onLoadCompetition
                 setSharedCompetitionMessage('Error loading shared competition. The URL may be invalid.');
             }
         }
-    }, []);
+    }, [updateSavedCompetitions]);
 
     return (
         <div className="landing-page-wrapper">
@@ -117,7 +135,7 @@ const LandingPage = ({ onCreateCompetition, savedCompetitions, onLoadCompetition
                                         <button onClick={() => onExportToPDF(index)} className="btn success">
                                             PDF
                                         </button>
-                                        <button onClick={() => shareCompetition(index)} className="share-button">
+                                        <button onClick={() => shareCompetition(index)} className="btn warning">
                                             <FaShareAlt/> {t.share}
                                         </button>
                                     </div>
