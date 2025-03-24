@@ -7,7 +7,7 @@ import CompetitionConfigForm from './CompetitionConfig/CompetitionConfigForm';
 import CompetitionConfigDisplay from './CompetitionConfigDisplay';
 import ParticipantForm from './ParticipantForm';
 import ParticipantList from './ParticipantList';
-import ScoreInput from './ScoreInput';
+import ScoreInput from './Score/ScoreInput';
 import Scoreboard from './Scoreboard';
 
 const AppContent = ({ onClearCache }) => {

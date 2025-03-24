@@ -291,53 +291,6 @@ h4 {
   color: inherit;
 }
 
-.score-input table {
-  margin: 20px auto;
-  border-collapse: collapse;
-  width: 100%;
-}
-
-.score-input th,
-.score-input td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: center;
-}
-
-body.light .score-input th,
-body.light .score-input td {
-  border-color: #ddd;
-}
-
-body.dark .score-input th,
-body.dark .score-input td {
-  border-color: #555;
-}
-
-body.light .score-input th {
-  background-color: #f2f2f2;
-}
-
-body.dark .score-input th {
-  background-color: #444;
-}
-
-.score-input input {
-  width: 40px;
-  padding: 2px;
-  text-align: center;
-}
-
-.score-input h4 {
-  margin-top: 20px;
-  border-top: 2px solid #ddd;
-  padding-top: 10px;
-}
-
-body.dark .score-input h4 {
-  border-top-color: #555;
-}
-
 .scoring-actions {
   display: flex;
   justify-content: center;
