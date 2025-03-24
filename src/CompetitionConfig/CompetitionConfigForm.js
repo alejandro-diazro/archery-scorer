@@ -83,7 +83,7 @@ const CompetitionConfigForm = ({ onConfigSubmit,onBack, initialConfig }) => {
                         <button type="button" onClick={onBack} className="btn reject">
                             {t.onBack}
                         </button>
-                        <button type="submit" className={"btn"}>{t.saveConfiguration}</button>
+                        <button type="submit" className={"btn accept"}>{t.saveConfiguration}</button>
                     </div>
                 </form>
             </div>

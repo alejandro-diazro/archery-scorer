@@ -1,6 +1,5 @@
-// src/ParticipantForm.js
 import React, { useState, useContext } from 'react';
-import { LanguageContext } from './LanguageContext';
+import { LanguageContext } from '../LanguageContext';
 
 const ParticipantForm = ({ addParticipant }) => {
     const { t } = useContext(LanguageContext);
@@ -20,8 +19,10 @@ const ParticipantForm = ({ addParticipant }) => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <h2>{t.addArcher}</h2>
+            <hr />
+            <h3>{t.addArcher}</h3>
             <div>
+                <label>{t.name}: </label>
                 <input
                     type="text"
                     value={name}
@@ -30,7 +31,7 @@ const ParticipantForm = ({ addParticipant }) => {
                 />
             </div>
             <div>
-                <label>{t.targetType}: </label>
+            <label>{t.targetType}: </label>
                 <select value={targetType} onChange={(e) => setTargetType(e.target.value)}>
                     <option value="">{t.select}</option>
                     <option value="FITA 60cm (completa)">FITA 60cm (completa)</option>
@@ -53,7 +54,7 @@ const ParticipantForm = ({ addParticipant }) => {
                     <option value="Desnudo">Desnudo</option>
                 </select>
             </div>
-            <button type="submit">{t.add}</button>
+            <button type="submit" className={"btn accept"}>{t.add}</button>
         </form>
     );
 };

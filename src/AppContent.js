@@ -5,10 +5,12 @@ import jsPDF from 'jspdf';
 import LandingPage from './Home/LandingPage';
 import CompetitionConfigForm from './CompetitionConfig/CompetitionConfigForm';
 import CompetitionConfigDisplay from './CompetitionConfigDisplay';
-import ParticipantForm from './ParticipantForm';
-import ParticipantList from './ParticipantList';
+import ParticipantForm from './Participant/ParticipantForm';
+import ParticipantList from './Participant/ParticipantList';
 import ScoreInput from './Score/ScoreInput';
 import Scoreboard from './Scoreboard';
+import RegistrationPhase from "./Participant/RegistrationPhase";
+import ScoringPhase from "./Score/ScoringPhase";
 
 const AppContent = ({ onClearCache }) => {
     const { t } = useContext(LanguageContext);
@@ -399,70 +401,30 @@ const AppContent = ({ onClearCache }) => {
                     onBack={handleBackFromConfig}
                     initialConfig={competitionConfig}
                 />
+            ) : phase === 'registration' ? (
+                <RegistrationPhase
+                    competitionConfig={competitionConfig}
+                    t={t}
+                    addParticipant={addParticipant}
+                    handleBackFromRegistration={handleBackFromRegistration}
+                    startScoring={startScoring}
+                    participants={participants}
+                    deleteParticipant={deleteParticipant}
+                    resetStorage={resetStorage}
+                />
             ) : (
-                <>
-                    <CompetitionConfigDisplay config={competitionConfig} />
-                    {phase === 'registration' ? (
-                        <>
-                            <ParticipantForm addParticipant={addParticipant} />
-                            <div className="registration-actions">
-                                <button onClick={handleBackFromRegistration} className="back-to-config-button">
-                                    {t.back}
-                                </button>
-                                <button onClick={startScoring} className="start-scoring-button">
-                                    {t.startScoring}
-                                </button>
-                            </div>
-                            <ParticipantList participants={participants} onDeleteParticipant={deleteParticipant} />
-                            <button onClick={resetStorage} className="reset-button">
-                                {t.resetAll}
-                            </button>
-                        </>
-                    ) : (
-                        <>
-                            <div className="series-navigation">
-                                <button
-                                    onClick={goToPreviousSeries}
-                                    disabled={currentSeries === 0}
-                                    className="nav-series-button"
-                                >
-                                    {t.previousSeries}
-                                </button>
-                                <span>Serie {currentSeries + 1} / {competitionConfig.series}</span>
-                                <button
-                                    onClick={goToNextSeries}
-                                    disabled={currentSeries === parseInt(competitionConfig.series) - 1}
-                                    className="nav-series-button"
-                                >
-                                    {t.nextSeries}
-                                </button>
-                            </div>
-                            {participants.map((participant, index) => (
-                                <ScoreInput
-                                    key={index}
-                                    participant={participant}
-                                    onScoreUpdate={(newRounds) => updateScores(index, newRounds)}
-                                    arrowsPerRound={parseInt(competitionConfig.arrowsPerRound)}
-                                    roundsPerSeries={parseInt(competitionConfig.rounds)}
-                                    series={parseInt(competitionConfig.series)}
-                                    currentSeries={currentSeries}
-                                />
-                            ))}
-                            <Scoreboard participants={participants} />
-                            <div className="scoring-actions">
-                                <button onClick={handleBackFromScoring} className="back-to-registration-button">
-                                    {t.back}
-                                </button>
-                                <button onClick={goToMenu} className="back-to-menu-button">
-                                    Back to Menu
-                                </button>
-                                <button onClick={resetStorage} className="reset-button">
-                                    {t.resetAll}
-                                </button>
-                            </div>
-                        </>
-                    )}
-                </>
+                <ScoringPhase
+                    competitionConfig={competitionConfig}
+                    t={t}
+                    participants={participants}
+                    currentSeries={currentSeries}
+                    goToPreviousSeries={goToPreviousSeries}
+                    goToNextSeries={goToNextSeries}
+                    updateScores={updateScores}
+                    handleBackFromScoring={handleBackFromScoring}
+                    goToMenu={goToMenu}
+                    resetStorage={resetStorage}
+                />
             )}
         </div>
     );

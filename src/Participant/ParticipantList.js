@@ -1,6 +1,6 @@
 // src/ParticipantList.js
 import React, { useContext } from 'react';
-import { LanguageContext } from './LanguageContext';
+import { LanguageContext } from '../LanguageContext';
 
 const ParticipantList = ({ participants, onDeleteParticipant }) => {
     const { t } = useContext(LanguageContext);
@@ -17,7 +17,7 @@ const ParticipantList = ({ participants, onDeleteParticipant }) => {
                             {participant.name} ({participant.archerType}, {participant.targetType})
                             <button
                                 onClick={() => onDeleteParticipant(index)}
-                                className="delete-participant-button"
+                                className="btn reject"
                             >
                                 {t.delete}
                             </button>

@@ -1,38 +1,33 @@
 .score-input {
     max-width: 100%;
-    overflow-x: hidden; /* Evita scroll horizontal en el contenedor externo */
+    overflow-x: hidden;
 }
 
-/* Contenedor de la tabla con scroll horizontal */
 .table-wrapper {
-    overflow-x: auto; /* Permite scroll horizontal solo en la tabla */
-    margin: 20px 0;
-    -webkit-overflow-scrolling: touch; /* Mejora el scroll en móviles */
+    overflow-x: auto;
+    margin: 20px 0.5rem;
+    -webkit-overflow-scrolling: touch;
 }
 
-/* Estilos de la tabla restaurados a los originales */
 .score-input table {
     border-collapse: collapse;
-    width: auto; /* La tabla puede ser más ancha que el contenedor */
-    min-width: 100%; /* Asegura que ocupe al menos el ancho del contenedor */
+    width: auto;
+    min-width: 100%;
 }
 
-/* Celdas con tamaños originales */
 .score-input th,
 .score-input td {
     border: 1px solid var(--border-primary);
-    padding: 8px; /* Tamaño original */
+    padding: 8px;
     text-align: center;
 }
 
-/* Inputs con tamaño original */
 .score-input input {
-    width: 40px; /* Tamaño original */
+    width: 40px;
     padding: 2px;
     text-align: center;
 }
 
-/* Encabezados */
 body.light .score-input th {
     background-color: var(--header-background);
 }
@@ -51,7 +46,6 @@ body.dark .score-input td {
     border-color: var(--border-primary);
 }
 
-/* Título de la serie */
 .score-input h4 {
     margin-top: 20px;
     border-top: 2px solid var(--border-primary);
@@ -60,4 +54,81 @@ body.dark .score-input td {
 
 body.dark .score-input h4 {
     border-top-color: var(--border-primary);
+}
+
+.custom-keyboard {
+    position: fixed;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    background: var(--background-primary);
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    max-width: 90%;
+    margin: 0 auto;
+}
+
+.score-button {
+    margin: 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    background: var(--background-tertiary);
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    min-width: 50px;
+}
+
+.score-button:hover {
+    background-color: var(--background-secondary);
+}
+
+.score-button.yellow {
+    color: var(--warning);
+}
+
+.score-button.red {
+color: var(--danger);
+}
+
+.score-button.blue {
+    color: var(--info);
+}
+
+.score-button.black {
+    color: var(--text-primary);
+}
+
+.score-button.white {
+    color: var(--text-primary);
+}
+
+.score-button.close {
+    color: var(--text-primary);
+}
+
+.scoring-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 3rem;
+}
+
+.series-navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.series-navigation span {
+    font-size: 1.2em;
+    margin: 0 10px;
 }

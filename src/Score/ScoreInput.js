@@ -10,6 +10,7 @@ const ScoreInput = ({ participant, onScoreUpdate, arrowsPerRound, roundsPerSerie
             round.scores.map((score) => (score === '' || score == null ? '' : score.toString()))
         )
     );
+
     const [activeInput, setActiveInput] = useState(null);
 
     const getScoreConstraints = (targetType) => {
@@ -33,11 +34,11 @@ const ScoreInput = ({ participant, onScoreUpdate, arrowsPerRound, roundsPerSerie
 
     const handleScoreChange = (roundIndex, scoreIndex, value) => {
         const newTempScores = [...tempScores];
-        newTempScores[roundIndex][scoreIndex] = value;
+        newTempScores[roundIndex][scoreIndex] = value === 'M' ? '0' : value;
         setTempScores(newTempScores);
 
         const newRounds = [...participant.rounds];
-        newRounds[roundIndex].scores[scoreIndex] = value === '' ? '' : parseInt(value);
+        newRounds[roundIndex].scores[scoreIndex] = value === 'M' ? 0 : (value === '' ? '' : parseInt(value));
         newRounds[roundIndex].sum = newRounds[roundIndex].scores.reduce(
             (acc, score) => acc + (parseInt(score) || 0),
             0
@@ -127,75 +128,55 @@ const ScoreInput = ({ participant, onScoreUpdate, arrowsPerRound, roundsPerSerie
         return { highScore1, highScore2 };
     };
 
+    const getButtonClassName = (score) => {
+        const numScore = score === 'M' ? 'M' : parseInt(score);
+        switch (numScore) {
+            case 11:
+            case 10:
+            case 9:
+                return 'score-button yellow';
+            case 8:
+            case 7:
+                return 'score-button red';
+            case 6:
+            case 5:
+                return 'score-button blue';
+            case 4:
+            case 3:
+                return 'score-button black';
+            case 2:
+            case 1:
+                return 'score-button white';
+            case 'M':
+                return 'score-button white';
+            default:
+                return 'score-button';
+        }
+    };
+
     const CustomKeyboard = ({ roundIndex, scoreIndex }) => (
-        <div
-            style={{
-                position: 'fixed',
-                bottom: '10px',
-                left: 0,
-                right: 0,
-                background: 'var(--background-primary)',
-                padding: '10px',
-                display: 'flex',
-                justifyContent: 'center',
-                flexWrap: 'wrap',
-                border: '1px solid var(--border-color)',
-                borderRadius: '8px',
-                boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.1)',
-                zIndex: 1000,
-                maxWidth: '90%',
-                margin: '0 auto',
-            }}
-        >
+        <div className="custom-keyboard">
+            {constraints.allowed
+                .filter((score) => score !== 0)
+                .sort((a, b) => b - a)
+                .map((score) => (
+                    <button
+                        key={score}
+                        onClick={() => handleScoreChange(roundIndex, scoreIndex, score.toString())}
+                        className={getButtonClassName(score)}
+                    >
+                        {score}
+                    </button>
+                ))}
             <button
                 onClick={() => handleScoreChange(roundIndex, scoreIndex, 'M')}
-                style={{
-                    margin: '5px',
-                    padding: '10px 15px',
-                    fontSize: '16px',
-                    background: 'var(--background-tertiary)',
-                    color: 'var(--text-primary)',
-                    border: '1px solid #ccc',
-                    borderRadius: '5px',
-                    cursor: 'pointer',
-                    minWidth: '50px',
-                }}
+                className={getButtonClassName('M')}
             >
                 M
             </button>
-            {constraints.allowed.filter((score) => score !== 0).map((score) => (
-                <button
-                    key={score}
-                    onClick={() => handleScoreChange(roundIndex, scoreIndex, score.toString())}
-                    style={{
-                        margin: '5px',
-                        padding: '10px 15px',
-                        fontSize: '16px',
-                        background: 'var(--background-tertiary)',
-                        color: 'var(--text-primary)',
-                        border: '1px solid #ccc',
-                        borderRadius: '5px',
-                        cursor: 'pointer',
-                        minWidth: '50px',
-                    }}
-                >
-                    {score}
-                </button>
-            ))}
-
             <button
                 onClick={() => setActiveInput(null)}
-                style={{
-                    margin: '5px',
-                    padding: '10px 15px',
-                    fontSize: '16px',
-                    background: 'var(--background-tertiary)',
-                    color: 'var(--text-primary)',
-                    border: '1px solid #ccc',
-                    borderRadius: '5px',
-                    cursor: 'pointer',
-                    minWidth: '50px',
-                }}
+                className="score-button close"
             >
                 Cerrar
             </button>
@@ -207,7 +188,7 @@ const ScoreInput = ({ participant, onScoreUpdate, arrowsPerRound, roundsPerSerie
             return;
         }
 
-        setActiveInput({ roundIndex, scoreIndex });
+        setActiveInput({roundIndex, scoreIndex});
     };
 
     const startRound = currentSeries * roundsPerSeries;

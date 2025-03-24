@@ -42,6 +42,8 @@ const translations = {
         previousSeries: "Previous Series",
         nextSeries: "Next Series",
         onBack: "Go Back",
+        name: "Name",
+        configMenu:"Settings",
     },
     es: {
         welcome: "Bienvenido a Archery Scorer",
@@ -81,6 +83,8 @@ const translations = {
         previousSeries: "Serie Anterior",
         nextSeries: "Serie Siguiente",
         onBack : "Ir Atras",
+        name: "Nombre",
+        configMenu:"Configuración",
     },
 };
 
