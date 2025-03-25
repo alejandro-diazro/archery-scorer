@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/archery-scorer/static/css/main.4adf18b3.css",
-    "main.js": "/archery-scorer/static/js/main.fb37dc01.js",
+    "main.css": "/archery-scorer/static/css/main.0e066bdd.css",
+    "main.js": "/archery-scorer/static/js/main.c5a19e6f.js",
     "static/js/239.463129e8.chunk.js": "/archery-scorer/static/js/239.463129e8.chunk.js",
     "static/js/977.7d120ce9.chunk.js": "/archery-scorer/static/js/977.7d120ce9.chunk.js",
     "static/js/732.e3d833f0.chunk.js": "/archery-scorer/static/js/732.e3d833f0.chunk.js",
     "static/js/453.05547886.chunk.js": "/archery-scorer/static/js/453.05547886.chunk.js",
     "index.html": "/archery-scorer/index.html",
-    "main.4adf18b3.css.map": "/archery-scorer/static/css/main.4adf18b3.css.map",
-    "main.fb37dc01.js.map": "/archery-scorer/static/js/main.fb37dc01.js.map",
+    "main.0e066bdd.css.map": "/archery-scorer/static/css/main.0e066bdd.css.map",
+    "main.c5a19e6f.js.map": "/archery-scorer/static/js/main.c5a19e6f.js.map",
     "239.463129e8.chunk.js.map": "/archery-scorer/static/js/239.463129e8.chunk.js.map",
     "732.e3d833f0.chunk.js.map": "/archery-scorer/static/js/732.e3d833f0.chunk.js.map",
     "453.05547886.chunk.js.map": "/archery-scorer/static/js/453.05547886.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.4adf18b3.css",
-    "static/js/main.fb37dc01.js"
+    "static/css/main.0e066bdd.css",
+    "static/js/main.c5a19e6f.js"
   ]
 }
