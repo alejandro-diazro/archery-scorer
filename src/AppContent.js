@@ -11,7 +11,6 @@ import exportToPDF from "./PDF/exportPDF";
 const AppContent = ({ onClearCache }) => {
     const { t } = useContext(LanguageContext);
 
-    // Estados principales
     const [competitionConfig, setCompetitionConfig] = useState(() => {
         const savedConfig = localStorage.getItem('archeryCompetitionConfig');
         return savedConfig
@@ -32,14 +31,13 @@ const AppContent = ({ onClearCache }) => {
     const updateSavedCompetitions = (newCompetitions) => {
         setSavedCompetitions(newCompetitions);
     };
-    // Guardar datos en localStorage cuando cambian
+
     useEffect(() => {
         localStorage.setItem('archeryCompetitionConfig', JSON.stringify(competitionConfig));
         localStorage.setItem('archeryParticipants', JSON.stringify(participants));
         localStorage.setItem('savedCompetitions', JSON.stringify(savedCompetitions));
     }, [competitionConfig, participants, savedCompetitions]);
 
-    // Guardar la competición en savedCompetitions cuando se completa la configuración
     useEffect(() => {
         if (
             competitionConfig.isConfigured &&
@@ -72,7 +70,6 @@ const AppContent = ({ onClearCache }) => {
         }
     }, [competitionConfig, participants, phase, savedCompetitions, hasSavedCompetition]);
 
-    // Funciones de navegación
     const handleConfigSubmit = (newConfig) => {
         setCompetitionConfig({ ...newConfig, isConfigured: true });
         setPhase('registration');
@@ -139,7 +136,6 @@ const AppContent = ({ onClearCache }) => {
         setCurrentSeries(0);
     };
 
-    // Funciones de manejo de participantes y puntuaciones
     const addParticipant = (name, targetType, archerType) => {
         const maxRounds = parseInt(competitionConfig.rounds) * parseInt(competitionConfig.series);
         const arrowsPerRound = parseInt(competitionConfig.arrowsPerRound);
@@ -164,7 +160,6 @@ const AppContent = ({ onClearCache }) => {
 
         setParticipants(updatedParticipants);
 
-        // Actualizar savedCompetitions con las nuevas puntuaciones
         const updatedSavedCompetitions = savedCompetitions.map((comp) => {
             if (
                 comp.name === competitionConfig.name &&
@@ -181,7 +176,6 @@ const AppContent = ({ onClearCache }) => {
         setSavedCompetitions(updatedSavedCompetitions);
     };
 
-    // Funciones de manejo de almacenamiento
     const resetStorage = () => {
         localStorage.removeItem('archeryCompetitionConfig');
         localStorage.removeItem('archeryParticipants');
@@ -245,7 +239,6 @@ const AppContent = ({ onClearCache }) => {
         setSavedCompetitions(updatedSavedCompetitions);
     };
 
-    // Renderizado de las vistas
     return (
         <div className="App">
             {phase === 'landing' ? (
