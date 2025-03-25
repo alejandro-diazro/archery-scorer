@@ -44,6 +44,13 @@ const translations = {
         onBack: "Go Back",
         name: "Name",
         configMenu:"Settings",
+        scorePhase:"Score Mode",
+        menuTitle:"Score Entry",
+        firstArcher:"Current Archer",
+        currentRound:"Scoring Round",
+        scores:"Scores",
+        noScoresYet:"noScoresYet",
+        noParticipants:"No participants available or all scored",
     },
     es: {
         welcome: "Bienvenido a Archery Scorer",
@@ -85,6 +92,13 @@ const translations = {
         onBack : "Ir Atras",
         name: "Nombre",
         configMenu:"Configuración",
+        scorePhase:"Modo Puntuación",
+        menuTitle:"Menu puntuación",
+        firstArcher:"Arquero",
+        currentRound:"Ronda",
+        scores:"Puntos",
+        noScoresYet:"Todavía no hay registrados",
+        noParticipants:"No hay participantes disponibles o todos han puntuado",
     },
 };
 
