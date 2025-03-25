@@ -44,7 +44,7 @@ const exportToPDF = (competition, t) => {
             tableHeaders.push('Sum', 'Total', participant.targetType === '3D' ? '11s' : '10s', participant.targetType === '3D' ? '10s' : '9s');
 
             participant.rounds
-                .filter((_, roundIndex) => Math.floor(roundIndex / competition.rounds) === seriesIndex) // Filtra las rondas para la serie actual
+                .filter((_, roundIndex) => Math.floor(roundIndex / competition.rounds) === seriesIndex)
                 .forEach((round, roundIndex) => {
                     const tens = round.scores.filter(score => parseInt(score) === (participant.targetType === '3D' ? 11 : 10)).length;
                     const nines = round.scores.filter(score => parseInt(score) === (participant.targetType === '3D' ? 10 : 9)).length;
@@ -54,7 +54,7 @@ const exportToPDF = (competition, t) => {
                     seriesTotalScore += round.sum || 0;
 
                     let row = [roundIndex + 1];
-                    row.push(...round.scores.map(score => score === '' || parseInt(score) === 0 ? 'M' : score.toString()));
+                    row.push(...round.scores.map(score => score === '' || score == null || isNaN(parseInt(score)) || parseInt(score) === 0 ? 'M' : score.toString()));
                     row.push(round.sum || 0, seriesTotalScore, tens, nines);
                     tableData.push(row);
                 });
