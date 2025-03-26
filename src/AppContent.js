@@ -1,7 +1,6 @@
 // src/AppContent.js
 import React, { useState, useEffect, useContext } from 'react';
 import { LanguageContext } from './LanguageContext';
-import jsPDF from 'jspdf';
 import LandingPage from './Home/LandingPage';
 import CompetitionConfigForm from './CompetitionConfig/CompetitionConfigForm';
 import RegistrationPhase from "./Participant/RegistrationPhase";
@@ -15,12 +14,13 @@ const AppContent = ({ onClearCache }) => {
         const savedConfig = localStorage.getItem('archeryCompetitionConfig');
         return savedConfig
             ? JSON.parse(savedConfig)
-            : { name: '', location: '', date: '2025-03-21', rounds: '', arrowsPerRound: '', series: '', isConfigured: false };
+            : { name: '', location: '', date: '2025-03-21', rounds: '', arrowsPerRound: '', series: '', teamMode: false, eliminationMode: false, isConfigured: false };
     });
     const [participants, setParticipants] = useState(() => {
         const saved = localStorage.getItem('archeryParticipants');
         return saved ? JSON.parse(saved) : [];
     });
+    const [teams, setTeams] = useState([]);
     const [phase, setPhase] = useState('landing');
     const [savedCompetitions, setSavedCompetitions] = useState(() => {
         const saved = localStorage.getItem('savedCompetitions');
@@ -28,6 +28,8 @@ const AppContent = ({ onClearCache }) => {
     });
     const [hasSavedCompetition, setHasSavedCompetition] = useState(false);
     const [currentSeries, setCurrentSeries] = useState(0);
+    const [eliminationPhase, setEliminationPhase] = useState(false);
+
     const updateSavedCompetitions = (newCompetitions) => {
         setSavedCompetitions(newCompetitions);
     };
@@ -52,7 +54,10 @@ const AppContent = ({ onClearCache }) => {
                 rounds: competitionConfig.rounds,
                 arrowsPerRound: competitionConfig.arrowsPerRound,
                 series: competitionConfig.series,
+                teamMode: competitionConfig.teamMode,
+                eliminationMode: competitionConfig.eliminationMode,
                 participants: participants,
+                teams: teams,
             };
 
             const competitionExists = savedCompetitions.some(
@@ -71,7 +76,11 @@ const AppContent = ({ onClearCache }) => {
     }, [competitionConfig, participants, phase, savedCompetitions, hasSavedCompetition]);
 
     const handleConfigSubmit = (newConfig) => {
-        setCompetitionConfig({ ...newConfig, isConfigured: true });
+        setCompetitionConfig((prevConfig) => ({
+            ...prevConfig,
+            ...newConfig,
+            isConfigured: true
+        }));
         setPhase('registration');
     };
 
@@ -101,6 +110,8 @@ const AppContent = ({ onClearCache }) => {
             rounds: '',
             arrowsPerRound: '',
             series: '',
+            teamMode: false,
+            eliminationMode: false,
             isConfigured: false,
         });
         setParticipants([]);
@@ -115,6 +126,13 @@ const AppContent = ({ onClearCache }) => {
             setCurrentSeries(0);
         } else {
             alert(t.noArchers);
+        }
+    };
+
+    const startEliminations = () => {
+        if (competitionConfig.eliminationMode && participants.length > 1) {
+            setEliminationPhase(true);
+            setPhase('elimination');
         }
     };
 
@@ -136,14 +154,27 @@ const AppContent = ({ onClearCache }) => {
         setCurrentSeries(0);
     };
 
-    const addParticipant = (name, targetType, archerType) => {
+    const addParticipant = (name, targetType, archerType, teamName = '') => {
         const maxRounds = parseInt(competitionConfig.rounds) * parseInt(competitionConfig.series);
         const arrowsPerRound = parseInt(competitionConfig.arrowsPerRound);
         const initialRounds = Array.from({ length: maxRounds }, () => ({
             scores: Array(arrowsPerRound).fill(''),
             sum: 0,
         }));
-        setParticipants([...participants, { name, targetType, archerType, rounds: initialRounds, total: 0 }]);
+        const newParticipant = { name, targetType, archerType, teamName, rounds: initialRounds, total: 0 };
+        setParticipants([...participants, newParticipant]);
+
+        if (competitionConfig.teamMode && teamName) {
+            console.log("hola");
+            const teamIndex = teams.findIndex((team) => team.name === teamName);
+            if (teamIndex === -1) {
+                setTeams([...teams, { name: teamName, members: [newParticipant] }]);
+            } else {
+                const updatedTeams = [...teams];
+                updatedTeams[teamIndex].members.push(newParticipant);
+                setTeams(updatedTeams);
+            }
+        }
     };
 
     const deleteParticipant = (index) => {
@@ -160,6 +191,15 @@ const AppContent = ({ onClearCache }) => {
 
         setParticipants(updatedParticipants);
 
+        if (competitionConfig.teamMode) {
+            const updatedTeams = teams.map((team) => {
+                const teamMembers = updatedParticipants.filter((p) => p.teamName === team.name);
+                const teamTotal = teamMembers.reduce((acc, member) => acc + member.total, 0);
+                return { ...team, members: teamMembers, total: teamTotal };
+            });
+            setTeams(updatedTeams);
+        }
+
         const updatedSavedCompetitions = savedCompetitions.map((comp) => {
             if (
                 comp.name === competitionConfig.name &&
@@ -169,6 +209,7 @@ const AppContent = ({ onClearCache }) => {
                 return {
                     ...comp,
                     participants: updatedParticipants,
+                    teams: competitionConfig.teamMode ? teams : [],
                 };
             }
             return comp;
@@ -222,9 +263,12 @@ const AppContent = ({ onClearCache }) => {
             rounds: competition.rounds,
             arrowsPerRound: competition.arrowsPerRound,
             series: competition.series,
+            teamMode: competition.teamMode || false,
+            eliminationMode: competition.eliminationMode || false,
             isConfigured: true,
         });
         setParticipants(competition.participants);
+        setTeams(competition.teams || []);
 
         const hasScores = competition.participants.some((participant) =>
             participant.rounds.some((round) => round.scores.some((score) => score !== ''))
@@ -237,6 +281,22 @@ const AppContent = ({ onClearCache }) => {
     const deleteCompetition = (index) => {
         const updatedSavedCompetitions = savedCompetitions.filter((_, i) => i !== index);
         setSavedCompetitions(updatedSavedCompetitions);
+    };
+
+    const renderEliminationPhase = () => {
+        const sortedParticipants = [...participants].sort((a, b) => b.total - a.total);
+        const topParticipants = sortedParticipants.slice(0, Math.min(8, sortedParticipants.length)); // Ejemplo: top 8
+        return (
+            <div>
+                <h2>{t.eliminationPhase}</h2>
+                <ul>
+                    {topParticipants.map((p, index) => (
+                        <li key={index}>{p.name} - Total: {p.total}</li>
+                    ))}
+                </ul>
+                <button onClick={goToMenu}>{t.backToMenu}</button>
+            </div>
+        );
     };
 
     return (
@@ -265,10 +325,16 @@ const AppContent = ({ onClearCache }) => {
                     handleBackFromRegistration={handleBackFromRegistration}
                     startScoring={startScoring}
                     participants={participants}
-                    deleteParticipant={deleteParticipant}
-                    resetStorage={resetStorage}
+                    deleteParticipant={(index) => setParticipants(participants.filter((_, i) => i !== index))}
+                    resetStorage={() => {
+                        localStorage.clear();
+                        setCompetitionConfig({ ...competitionConfig, isConfigured: false });
+                        setParticipants([]);
+                        setTeams([]);
+                        setPhase('landing');
+                    }}
                 />
-            ) : (
+            ) : phase === 'scoring' ? (
                 <ScoringPhase
                     competitionConfig={competitionConfig}
                     t={t}
@@ -279,9 +345,18 @@ const AppContent = ({ onClearCache }) => {
                     updateScores={updateScores}
                     handleBackFromScoring={handleBackFromScoring}
                     goToMenu={goToMenu}
-                    resetStorage={resetStorage}
+                    resetStorage={() => {
+                        localStorage.clear();
+                        setCompetitionConfig({ ...competitionConfig, isConfigured: false });
+                        setParticipants([]);
+                        setTeams([]);
+                        setPhase('landing');
+                    }}
+                    startEliminations={startEliminations}
                 />
-            )}
+            ) : phase === 'elimination' ? (
+                renderEliminationPhase()
+            ) : null}
         </div>
     );
 };

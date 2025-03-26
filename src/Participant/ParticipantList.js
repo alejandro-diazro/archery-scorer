@@ -14,7 +14,7 @@ const ParticipantList = ({ participants, onDeleteParticipant }) => {
                 <ul>
                     {participants.map((participant, index) => (
                         <li key={index}>
-                            {participant.name} ({participant.archerType}, {participant.targetType})
+                            {participant.name} {participant.teamName ? `(${participant.teamName})` : ''} -{' '} ({participant.archerType}, {participant.targetType})
                             <button
                                 onClick={() => onDeleteParticipant(index)}
                                 className="btn reject"

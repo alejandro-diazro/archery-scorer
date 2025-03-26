@@ -1,19 +1,21 @@
 import React, { useState, useContext } from 'react';
 import { LanguageContext } from '../LanguageContext';
 
-const ParticipantForm = ({ addParticipant }) => {
+const ParticipantForm = ({ addParticipant, teamMode }) => {
     const { t } = useContext(LanguageContext);
     const [name, setName] = useState('');
     const [targetType, setTargetType] = useState('');
     const [archerType, setArcherType] = useState('');
+    const [teamName, setTeamName] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (name.trim() && targetType && archerType) {
-            addParticipant(name, targetType, archerType);
+            addParticipant(name, targetType, archerType, teamMode ? teamName : '');
             setName('');
             setTargetType('');
             setArcherType('');
+            setTeamName('');
         }
     };
 
@@ -54,6 +56,17 @@ const ParticipantForm = ({ addParticipant }) => {
                     <option value="Desnudo">Desnudo</option>
                 </select>
             </div>
+            {teamMode && (
+                <div>
+                    <label>{t.teamName}: </label>
+                    <input
+                        type="text"
+                        value={teamName}
+                        onChange={(e) => setTeamName(e.target.value)}
+                        placeholder={t.teamNamePlaceholder || 'Nombre del equipo'}
+                    />
+                </div>
+            )}
             <button type="submit" className={"btn accept"}>{t.add}</button>
         </form>
     );

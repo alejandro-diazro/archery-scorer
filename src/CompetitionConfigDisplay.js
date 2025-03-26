@@ -12,6 +12,7 @@ const CompetitionConfigDisplay = ({ config }) => {
             <p>{t.location}: {config.location}</p>
             <p>{t.date}: {config.date}</p>
             <p>{t.roundsPerSeries}: {config.rounds} | {t.arrowsPerRound}: {config.arrowsPerRound} | {t.series}: {config.series}</p>
+            <p>{config.teamMode ? "Modo por equipos: Si": ""} </p>
         </div>
     );
 };

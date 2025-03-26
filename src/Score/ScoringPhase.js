@@ -103,7 +103,7 @@ const ScoringPhase = ({
                     currentSeries={currentSeries}
                 />
             ))}
-            <Scoreboard participants={participants} />
+            <Scoreboard participants={participants} teamMode={competitionConfig.teamMode}/>
             <div className="scoring-actions">
                 <button onClick={handleBackFromScoring} className="btn warning">
                     {t.configMenu}

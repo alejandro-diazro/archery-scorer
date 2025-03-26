@@ -10,11 +10,13 @@ const CompetitionConfigForm = ({ onConfigSubmit,onBack, initialConfig }) => {
     const [rounds, setRounds] = useState(initialConfig.rounds);
     const [arrowsPerRound, setArrowsPerRound] = useState(initialConfig.arrowsPerRound);
     const [series, setSeries] = useState(initialConfig.series);
+    const [teamMode, setTeamMode] = useState(initialConfig.teamMode || false);
+    const [eliminationMode, setEliminationMode] = useState(initialConfig.eliminationMode || false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (name && location && date && rounds > 0 && arrowsPerRound > 0 && series > 0) {
-            onConfigSubmit({ name, location, date, rounds, arrowsPerRound, series });
+            onConfigSubmit({ name, location, date, rounds, arrowsPerRound, series, teamMode, eliminationMode, });
         }
     };
 
@@ -77,6 +79,22 @@ const CompetitionConfigForm = ({ onConfigSubmit,onBack, initialConfig }) => {
                             onChange={(e) => setSeries(e.target.value)}
                             min="1"
                             placeholder="Ej: 2"
+                        />
+                    </div>
+                    <div>
+                        <label>{t.teamMode}: </label>
+                        <input
+                            type="checkbox"
+                            checked={teamMode}
+                            onChange={(e) => setTeamMode(e.target.checked)}
+                        />
+                    </div>
+                    <div>
+                        <label>{t.eliminationMode}: </label>
+                        <input
+                            type="checkbox"
+                            checked={eliminationMode}
+                            onChange={(e) => setEliminationMode(e.target.checked)}
                         />
                     </div>
                     <div className="actions-competition">

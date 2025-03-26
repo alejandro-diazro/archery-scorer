@@ -11,14 +11,15 @@ const RegistrationPhase = ({
                                startScoring,
                                participants,
                                deleteParticipant,
-                               resetStorage
+                               resetStorage,
+                               startEliminations,
                            }) => {
     return (
         <>
             <div className="competition-config-page-wrapper">
                 <div className="competition-config-page">
                     <CompetitionConfigDisplay config={competitionConfig}/>
-                    <ParticipantForm addParticipant={addParticipant}/>
+                    <ParticipantForm addParticipant={addParticipant}  teamMode={competitionConfig.teamMode}/>
                     <div className="registration-actions">
                         <button onClick={startScoring} className="btn warning">
                             {t.startScoring}

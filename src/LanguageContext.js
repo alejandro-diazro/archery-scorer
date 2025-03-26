@@ -51,6 +51,10 @@ const translations = {
         scores:"Scores",
         noScoresYet:"noScoresYet",
         noParticipants:"No participants available or all scored",
+        teamMode: "Team Mode",
+        eliminationMode: "Elimination Mode",
+        teamName: "Team Name",
+        teamNamePlaceholder: "Ej: Equipo A",
     },
     es: {
         welcome: "Bienvenido a Archery Scorer",
@@ -99,6 +103,10 @@ const translations = {
         scores:"Puntos",
         noScoresYet:"Todavía no hay registrados",
         noParticipants:"No hay participantes disponibles o todos han puntuado",
+        teamMode: "Modo por equipos",
+        eliminationMode: "Añadir Eliminatorias",
+        teamName: "Nombre del equipo",
+        teamNamePlaceholder: "Example: Team A",
     },
 };
 

@@ -1,6 +1,6 @@
 {
   "name": "app-tiro",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "private": true,
   "homepage": "https://alejandro-diazro.github.io/archery-scorer",
   "dependencies": {
